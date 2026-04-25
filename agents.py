@@ -140,7 +140,6 @@ def web_search_node(state: MessagesState) -> dict:
     return _invoke_agent(web_search_agent, state)
 
 def web_department_node(state: MessagesState):
-    # Memanggil agent web yang tadi lo buat di baris 129
     result = web_search_agent.invoke(
         state,
         config={"callbacks": [langfuse_handler]}
@@ -214,14 +213,13 @@ def sql_supervisor_node(state: MessagesState):
 # ─────────────────────────────────────────────
 # ROUTING FUNCTIONS
 # ─────────────────────────────────────────────
-from typing import Literal # Pastikan ini sudah di-import di atas
+from typing import Literal
 
-# Update Baris 186-198
 def main_supervisor_route(state: MessagesState) -> Literal["RAG_DEPARTMENT", "SQL_DEPARTMENT", "WEB_DEPARTMENT", "__end__"]:
     # 1. Ambil pesan terakhir dari supervisor
     last_message = state["messages"][-1].content.upper()
     
-    # 2. Logika BERHENTI (WAJIB)
+    # 2. Logika BERHENTI 
     if "FINISH" in last_message or "__end__" in last_message:
         return "__end__"
     
@@ -233,7 +231,7 @@ def main_supervisor_route(state: MessagesState) -> Literal["RAG_DEPARTMENT", "SQ
     if "WEB_DEPARTMENT" in last_message:
         return "WEB_DEPARTMENT"
         
-    # 4. Emergency Exit (Biar gak looping kalau LLM ngaco)
+    # 4. Emergency Exit 
     return "__end__"
 
 def rag_supervisor_route(state: MessagesState) -> Literal["semantic_search_agent", "similar_movie_agent"]:
@@ -319,7 +317,7 @@ def sql_department_node(state: MessagesState):
     return {"messages": result["messages"]}
 
 def web_department_node(state: MessagesState):
-    result = web_search_agent.invoke( # Sesuaikan nama variabel agent web lo
+    result = web_search_agent.invoke(
         state,
         config={"callbacks": [langfuse_handler]}
     )
@@ -329,7 +327,6 @@ def web_department_node(state: MessagesState):
 main_graph = StateGraph(MessagesState)
 main_graph.add_node("supervisor", main_supervisor_node)
 
-# ✅ TAMBAHKAN INI:
 main_graph.add_node("RAG_DEPARTMENT", rag_department_node)
 main_graph.add_node("SQL_DEPARTMENT", sql_department_node)
 main_graph.add_node("WEB_DEPARTMENT", web_department_node)
@@ -337,7 +334,6 @@ main_graph.add_node("WEB_DEPARTMENT", web_department_node)
 main_graph.set_entry_point("supervisor")
 main_graph.add_conditional_edges("supervisor", main_supervisor_route)
 
-# Hapus duplikat baris 303-305, keep yang ini aja:
 main_graph.add_edge("RAG_DEPARTMENT", "supervisor")
 main_graph.add_edge("SQL_DEPARTMENT", "supervisor")
 main_graph.add_edge("WEB_DEPARTMENT", "supervisor")
@@ -351,14 +347,14 @@ def run_agent(user_message: str, chat_history: list = None, session_id: str = No
     messages = (chat_history or []) + [HumanMessage(content=user_message)]
 
     config = {
-    "callbacks": [],  # ← kosongkan callbacks
+    "callbacks": [],
     "metadata": {"session_id": session_id or "default"}
 }
     result = graph.invoke(
     {"messages": messages}, 
     config={
         **config,
-        "recursion_limit": 10  # max 10 steps, stop kalau lebih
+        "recursion_limit": 10
     }
 )
 
@@ -380,7 +376,6 @@ def run_agent(user_message: str, chat_history: list = None, session_id: str = No
         "response": ai_response,
         "messages": result["messages"],
     }
-    # Flush langfuse biar data langsung ke-kirim
 
 
 # ─────────────────────────────────────────────

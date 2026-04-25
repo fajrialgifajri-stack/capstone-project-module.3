@@ -14,7 +14,7 @@ import time
 def fake_streaming(text):
     for word in text.split(" "):
         yield word + " "
-        time.sleep(0.02) # Atur kecepatan ngetik di sini
+        time.sleep(0.02) 
         
 # ─────────────────────────────────────────────
 # PAGE CONFIG
@@ -204,9 +204,9 @@ html, body, [class*="css"] {
 # SESSION STATE
 # ─────────────────────────────────────────────
 if "messages" not in st.session_state:
-    st.session_state.messages = []          # list of {"role", "content"}
+    st.session_state.messages = []
 if "lc_history" not in st.session_state:
-    st.session_state.lc_history = []        # LangChain message objects
+    st.session_state.lc_history = []
 if "session_id" not in st.session_state:
     st.session_state.session_id = str(uuid.uuid4())[:8]
 if "total_input_tokens" not in st.session_state:
@@ -381,14 +381,11 @@ if len(st.session_state.messages) > 1:
 def process_query(user_input: str):
     """Proses query user dan update session state."""
 
-    # Tambah ke display messages
     st.session_state.messages.append({"role": "user", "content": user_input})
 
-    # Render user message langsung sebelum proses
     with st.chat_message("user"):
         st.markdown(user_input)
 
-    # Maintain max 6 percakapan terakhir di history (3 turns = 6 messages)
     MAX_HISTORY = 6
     recent_lc = st.session_state.lc_history[-MAX_HISTORY:]
 
@@ -411,12 +408,11 @@ def process_query(user_input: str):
         time.sleep(0.03)
     message_placeholder.markdown(ai_response)
 
-    # Streaming kata per kata
     full_text = ""
     for word in ai_response.split(" "):
         full_text += word + " "
         message_placeholder.markdown(full_text + "▌")
-        time.sleep(0.03)  # delay antar kata
+        time.sleep(0.03)
     message_placeholder.markdown(ai_response)
 
     # Update LangChain history

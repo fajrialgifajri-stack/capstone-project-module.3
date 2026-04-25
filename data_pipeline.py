@@ -59,7 +59,7 @@ def clean_data(df: pd.DataFrame) -> pd.DataFrame:
         .astype("Int64")
     )
 
-    # ── Meta_score: 157 null → 0 (unknown, bukan jelek)
+    # ── Meta_score: 157 null → 0 
     df["Meta_score"] = df["Meta_score"].fillna(0).astype(int)
 
     # ── Certificate: 101 null → 'Not Rated'
