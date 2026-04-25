@@ -1,0 +1,10 @@
+streamlit
+langchain
+langchain-openai
+langchain-core
+langgraph
+langfuse
+qdrant-client
+langchain-qdrant
+tavily-python
+python-dotenv
