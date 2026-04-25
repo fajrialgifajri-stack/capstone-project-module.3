@@ -12,11 +12,17 @@ from qdrant_client.models import Distance, VectorParams
 # ─────────────────────────────────────────────
 # CONFIG (GANTI DENGAN PUNYA LO)
 # ─────────────────────────────────────────────
+
+import os
+from dotenv import load_dotenv
+
+# Load environment variables
 load_dotenv()
 
-OPENAI_API_KEY = "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" # Ganti dengan OpenAI Key lo
-QDRANT_URL     = "https://6fc6e8d0-ab85-474b-9d07-f483887a4f38.europe-west3-0.gcp.cloud.qdrant.io" # Ganti dengan URL Qdrant lo
-QDRANT_API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiJtIiwic3ViamVjdCI6ImFwaS1rZXk6NTlmMDFkNGMtY2QyMy00ZjRiLTk5NmYtZmQzOWNlMjhhODg4In0.a0Dm981yFGtO_buIB1LnyKq7VfZXrva_3g2wzUv4cU8" # Ganti dengan API Key Qdrant lo
+# Config - AMBIL DARI .ENV
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+QDRANT_URL = os.getenv("QDRANT_URL")
+QDRANT_API_KEY = os.getenv("QDRANT_API_KEY")
 
 COLLECTION_NAME = "cinema_intelligence"
 QDRANT_DOCS     = "qdrant_docs.pkl"
