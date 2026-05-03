@@ -5,16 +5,18 @@ Capstone Project Module 3 - CineBot
 LangGraph Hierarchical Multi-Agent + Langfuse Observability
 
 Arsitektur:
-  User
-   └── Supervisor
-         ├── RAG Sub-supervisor
-         │     ├── Semantic Search Agent  (Qdrant)
-         │     └── Similar Movie Agent   (Qdrant)
-         └── SQL Sub-supervisor
-               ├── Revenue Agent         (SQLite)
-               ├── Rating Agent          (SQLite)
-               ├── Director/Cast Agent   (SQLite)
-               └── Era Agent             (SQLite)
+User
+└── Main Supervisor
+    ├── RAG Department
+    │   ├── Semantic Search Agent  (Qdrant)
+    │   └── Similar Movie Agent    (Qdrant)
+    ├── SQL Department
+    │   ├── Revenue Agent          (SQLite)
+    │   ├── Rating Agent           (SQLite)
+    │   ├── Director/Cast Agent    (SQLite)
+    │   └── Era Agent              (SQLite)
+    └── WEB Department
+        └── Web Search Agent       (Tavily API)
 """
 
 from tools.web_tool import get_web_search_tool
