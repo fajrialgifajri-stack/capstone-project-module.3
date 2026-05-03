@@ -10,7 +10,7 @@ from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, VectorParams
  
 # ─────────────────────────────────────────────
-# CONFIG (GANTI DENGAN PUNYA LO)
+# CONFIG
 # ─────────────────────────────────────────────
 
 import os
@@ -19,7 +19,7 @@ from dotenv import load_dotenv
 # Load environment variables
 load_dotenv()
 
-# Config - AMBIL DARI .ENV
+
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 QDRANT_URL = os.getenv("QDRANT_URL")
 QDRANT_API_KEY = os.getenv("QDRANT_API_KEY")
@@ -62,7 +62,7 @@ def get_already_inserted(client: QdrantClient, collection_name: str) -> int:
  
  
 # ─────────────────────────────────────────────
-# 3. SETUP COLLECTION (HANYA KALAU BELUM ADA)
+# 3. SETUP COLLECTION
 # ─────────────────────────────────────────────
 def setup_collection(client: QdrantClient, collection_name: str):
     existing = [c.name for c in client.get_collections().collections]
@@ -89,10 +89,10 @@ def ingest(docs: list[Document], collection_name: str):
     client = QdrantClient(
         url=QDRANT_URL,
         api_key=QDRANT_API_KEY,
-        timeout=60  # naikin timeout jadi 60 detik
+        timeout=60  
     )
  
-    # Setup collection (skip kalau udah ada)
+    # Setup collection 
     setup_collection(client, collection_name)
  
     start_index = 0

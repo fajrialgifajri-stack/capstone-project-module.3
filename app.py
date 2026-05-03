@@ -279,7 +279,7 @@ with st.sidebar:
 
     col1, col2 = st.columns(2)
     with col1:
-        st.metric("Messages", len(st.session_state.messages))
+        st.metric("Messages", len(st.session_state.messages) // 2)
     with col2:
         total_tokens = st.session_state.total_input_tokens + st.session_state.total_output_tokens
         st.metric("Tokens", f"{total_tokens:,}")
@@ -401,13 +401,6 @@ def process_query(user_input: str):
     
     ai_response = result["response"]
     message_placeholder = st.empty()
-    full_text = ""
-    for word in ai_response.split(" "):
-        full_text += word + " "
-        message_placeholder.markdown(full_text + "▌")
-        time.sleep(0.03)
-    message_placeholder.markdown(ai_response)
-
     full_text = ""
     for word in ai_response.split(" "):
         full_text += word + " "
