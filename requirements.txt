@@ -2,9 +2,11 @@ streamlit
 langchain
 langchain-openai
 langchain-core
+langchain-community
 langgraph
 langfuse
 qdrant-client
 langchain-qdrant
 tavily-python
 python-dotenv
+pandas
