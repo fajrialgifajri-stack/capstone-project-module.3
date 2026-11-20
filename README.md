@@ -1,6 +1,6 @@
 # 🎬 CineBot — Hierarchical Multi-Agent Movie Assistant
 
-Capstone Project Module 3 — Purwadhika Data Science & Machine Learning
+Capstone Project Module 3 — Purwadhika AI Engineering
 
 ---
 
