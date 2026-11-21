@@ -3,6 +3,7 @@ langchain
 langchain-openai
 langchain-core
 langchain-community
+langchain-tavily
 langgraph
 langfuse
 qdrant-client

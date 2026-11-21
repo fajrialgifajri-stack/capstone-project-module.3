@@ -64,12 +64,17 @@ to the correct department:
   Examples: "film yang temanya mirip Inception", "rekomendasiin film sci-fi yang mind-blowing",
   "cari film yang vibenya kayak La La Land"
 
-- SQL_DEPARTMENT: for queries requiring exact data — revenue, ratings, director/cast info,
-  or filtering by year/era.
+- SQL_DEPARTMENT: for queries requiring exact data from the IMDB Top 1000 database —
+  revenue, ratings, director/cast info, or filtering by year/era.
   Examples: "film dengan rating tertinggi", "film terlaris Christopher Nolan",
   "film terbaik era 90an", "top 10 film box office"
 
-Reply with ONLY one word: RAG_DEPARTMENT or SQL_DEPARTMENT"""
+- WEB_DEPARTMENT: for anything about CURRENT or RECENT information: newest releases
+  ("terbaru", "latest", "upcoming", "2025", "2026"), movie news, release dates,
+  box office of new films, or anything unlikely to be in the IMDB Top 1000.
+  Examples: "film Marvel terbaru", "jadwal rilis film bulan ini", "berita film Avatar"
+
+Reply with ONLY one word: RAG_DEPARTMENT, SQL_DEPARTMENT, or WEB_DEPARTMENT"""
 
 RAG_SUPERVISOR_PROMPT = """You are the RAG department supervisor for CineBot.
 Route queries to the correct agent:
@@ -111,14 +116,28 @@ Rules:
 # ─────────────────────────────────────────────
 # HELPER: buat react agent dengan langfuse
 # ─────────────────────────────────────────────
-def _make_agent(tools: list):
-    """Buat react agent dengan Langfuse callback."""
+from datetime import date   # taruh di bagian import atas
+
+def _make_agent(tools: list, prompt: str | None = None):
     return create_react_agent(
         llm.bind(callbacks=[langfuse_handler]),
-        tools=tools
+        tools=tools,
+        prompt=prompt,
     )
 
+def web_prompt(state):
+    today = date.today().strftime("%d %B %Y")
+    system = SystemMessage(content=f"""Hari ini tanggal {today}.
+Kamu asisten film. WAJIB panggil tool pencarian web sebelum menjawab.
+Aturan:
+- Jawab HANYA berdasarkan hasil pencarian. Jangan menambah film dari ingatan.
+- Bandingkan tanggal rilis dengan hari ini: yang sudah lewat tulis "sudah rilis", yang belum tulis "akan rilis".
+- Utamakan film yang rilis atau akan rilis dalam waktu dekat dari hari ini. Abaikan film lama kecuali diminta.
+- Sebutkan tanggal rilis dan sumbernya.
+- Jawab dalam bahasa yang dipakai user.""")
+    return [system] + state["messages"]
 
+web_search_agent = _make_agent([get_web_search_tool()], prompt=web_prompt)
 # ─────────────────────────────────────────────
 # WORKER AGENTS
 # ─────────────────────────────────────────────
@@ -128,7 +147,6 @@ revenue_agent   = _make_agent([revenue_tool])
 rating_agent    = _make_agent([rating_tool])
 dir_cast_agent  = _make_agent([director_cast_tool])
 era_agent_exec  = _make_agent([era_tool])
-web_search_agent = _make_agent([get_web_search_tool])
 
 
 def _invoke_agent(agent_executor, state: MessagesState) -> dict:

@@ -1,8 +1,9 @@
-from langchain_community.tools.tavily_search import TavilySearchResults
+from langchain_tavily import TavilySearch
 
 def get_web_search_tool():
-    """
-    Cari informasi terbaru seputar film, berita selebriti, 
-    dan jadwal rilis film dari internet secara real-time.
-    """
-    return TavilySearchResults(k=3)
+    """Cari info film terkini (rilis baru, berita, jadwal) di internet."""
+    return TavilySearch(
+        max_results=5,
+        topic="general",
+        time_range="year",
+    )
