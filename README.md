@@ -14,6 +14,8 @@ CineBot adalah chatbot rekomendasi film berbasis **LangGraph Hierarchical Multi-
 
 Seluruh aktivitas agent di-track menggunakan **Langfuse** untuk observability.
 
+Link app : https://capstone-project-module-3-ai.streamlit.app/
+
 ---
 
 ## 🏗️ Arsitektur
