@@ -14,6 +14,9 @@ CineBot adalah chatbot rekomendasi film berbasis **LangGraph Hierarchical Multi-
 
 Seluruh aktivitas agent di-track menggunakan **Langfuse** untuk observability.
 
+
+Note : Cold start app butuh 10-20 detik!!!
+
 Link app : https://capstone-project-module-3-ai.streamlit.app/
 
 ---
